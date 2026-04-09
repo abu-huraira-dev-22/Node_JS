@@ -21,10 +21,22 @@ http.createServer((req,res)=>{
             req.on('end',()=>{
                 let rawData = Buffer.concat(dataBody).toString()
                 let readableData= queryString.parse(rawData)
-                console.log(readableData)
+                let dataString = "My name is " + readableData.name + " and my email is " + readableData.email
+
+                console.log(dataString)
+                fs.writeFile('text/' + readableData.name + '.txt',dataString, 'utf-8',(err)=>{
+  if(err){
+                    res.end("internal server error")
+                    return false;
+                }
+                else{
+                    console.log('file created')
+                }
+                })
+              
             })
             res.write('<h1>Data Submitted</h1>')
         }
         res.end()
     })
-}).listen(3200)
+}).listen(3100)
